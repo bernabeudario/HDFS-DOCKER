@@ -3,7 +3,7 @@ services:
     image: bde2020/hadoop-namenode:2.0.0-hadoop3.2.1-java8
     container_name: namenode
     ports:
-      - "9870:9870"  # Web UI
+      - "9870:9870"  # Web UI 
       - "9000:9000"  # HDFS
     environment:
       - CLUSTER_NAME=hadoopsample
