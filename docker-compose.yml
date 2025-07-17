@@ -1,0 +1,71 @@
+services:
+  namenode:
+    image: bde2020/hadoop-namenode:2.0.0-hadoop3.2.1-java8
+    container_name: namenode
+    ports:
+      - "9870:9870"  # Web UI
+      - "9000:9000"  # HDFS
+    environment:
+      - CLUSTER_NAME=hadoopsample
+      - CORE_CONF_fs_defaultFS=hdfs://namenode:9000
+      - HDFS_CONF_dfs_namenode_rpc-address=namenode:9000
+    volumes:
+      - hdfs_namenode:/hadoop/dfs/name
+    networks:
+      hdfs_network:
+        ipv4_address: 172.20.0.2
+
+  datanode1:
+    image: bde2020/hadoop-datanode:2.0.0-hadoop3.2.1-java8
+    container_name: datanode1
+    environment:
+      - CLUSTER_NAME=hadoopsample
+      - CORE_CONF_fs_defaultFS=hdfs://namenode:9000
+    volumes:
+      - hdfs_datanode1:/hadoop/dfs/data
+    depends_on:
+      - namenode
+    networks:
+      hdfs_network:
+        ipv4_address: 172.20.0.3
+
+  datanode2:
+    image: bde2020/hadoop-datanode:2.0.0-hadoop3.2.1-java8
+    container_name: datanode2
+    environment:
+      - CLUSTER_NAME=hadoopsample
+      - CORE_CONF_fs_defaultFS=hdfs://namenode:9000
+    volumes:
+      - hdfs_datanode2:/hadoop/dfs/data
+    depends_on:
+      - namenode
+    networks:
+      hdfs_network:
+        ipv4_address: 172.20.0.4
+
+  datanode3:
+    image: bde2020/hadoop-datanode:2.0.0-hadoop3.2.1-java8
+    container_name: datanode3
+    environment:
+      - CLUSTER_NAME=hadoopsample
+      - CORE_CONF_fs_defaultFS=hdfs://namenode:9000
+    volumes:
+      - hdfs_datanode3:/hadoop/dfs/data
+    depends_on:
+      - namenode
+    networks:
+      hdfs_network:
+        ipv4_address: 172.20.0.5
+
+volumes:
+  hdfs_namenode:
+  hdfs_datanode1:
+  hdfs_datanode2:
+  hdfs_datanode3:
+
+networks:
+  hdfs_network:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.20.0.0/16
